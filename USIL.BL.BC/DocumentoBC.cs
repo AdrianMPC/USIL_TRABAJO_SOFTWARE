@@ -45,12 +45,12 @@ namespace USIL.BL.BC
             }
 
         }
-        public bool DocumentoEliminar(DocumentoBE objDocumentoBE)
+        public bool DocumentoObtener(DocumentoBE objDocumentoBE)
         {
             try
             {
                 DocumentoDLAC objDocumentoDALC = new DocumentoDLAC();
-                return objDocumentoDALC.DocumentoEliminar(objDocumentoBE);
+                return objDocumentoDALC.DocumentoObtener(objDocumentoBE);
             }
             catch (Exception ex)
             {

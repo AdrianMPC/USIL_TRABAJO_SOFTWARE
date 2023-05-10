@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using USIL.BL.BE;
 using System.Data.SqlClient;
+using System.Reflection.PortableExecutable;
 
 namespace USIL.DL.DLAC
 {
@@ -18,6 +19,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspCarreraListar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
                 List<CarreraBE> LstCarreraBE = new List<CarreraBE>();
 
                 Con.Open();
@@ -27,6 +29,7 @@ namespace USIL.DL.DLAC
                     CarreraBE objCarreraBE = new CarreraBE();
                     objCarreraBE.Codigo = Convert.ToInt32(reader[0]);
                     objCarreraBE.Nombre = reader[1].ToString();
+                    objCarreraBE.Estado = reader[2].ToString();
                     LstCarreraBE.Add(objCarreraBE);
                 }
                 reader.Close();
@@ -45,7 +48,8 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspCarreraInsertar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
-                SqlParameter[] arrSqlParameter = new SqlParameter[2];
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter[] arrSqlParameter = new SqlParameter[3];
 
                 arrSqlParameter[0] = new SqlParameter();
                 arrSqlParameter[0].ParameterName = Codigo;
@@ -82,7 +86,8 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspCarreraEditar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
-                SqlParameter[] arrSqlParameter = new SqlParameter[2];
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter[] arrSqlParameter = new SqlParameter[3];
 
                 arrSqlParameter[0] = new SqlParameter();
                 arrSqlParameter[0].ParameterName = Codigo;
@@ -119,6 +124,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspCarreraEliminar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
                 SqlParameter arrSqlParameter = new SqlParameter();
 
                 arrSqlParameter.ParameterName = Codigo;
@@ -130,6 +136,41 @@ namespace USIL.DL.DLAC
                 Cmd.ExecuteNonQuery();
                 Con.Close();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public CarreraBE CarreraObtener(CarreraBE objCarreraBE)
+        {
+            try
+            {
+                SqlConnection Con = new SqlConnection(strCadenaConexion);
+                String strSP = "uspCarreraObtener";
+                SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter arrSqlParameter = new SqlParameter();
+
+                arrSqlParameter.ParameterName = Codigo;
+                arrSqlParameter.SqlDbType = SqlDbType.Int;
+                arrSqlParameter.Value = objCarreraBE.Codigo;
+
+                CarreraBE carreraobj = new CarreraBE();
+                Con.Open();
+                Cmd.Parameters.Add(arrSqlParameter);
+                Cmd.ExecuteNonQuery();
+
+                SqlDataReader reader = Cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    carreraobj.Codigo = Convert.ToInt32(reader[0]);
+                    carreraobj.Nombre = reader[1].ToString();
+                    carreraobj.Estado = reader[2].ToString();
+                }
+                Con.Close();
+                return carreraobj;
             }
             catch (Exception ex)
             {

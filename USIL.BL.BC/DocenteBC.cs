@@ -56,7 +56,19 @@ namespace USIL.BL.BC
             {
                 return false;
             }
+        }
 
+        public bool DocenteObtener(DocenteBE objDocenteBE)
+        {
+            try
+            {
+                DocenteDLAC objDocenteDALC = new DocenteDLAC();
+                return objDocenteDALC.DocenteObtener(objDocenteBE);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }

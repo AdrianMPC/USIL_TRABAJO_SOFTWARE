@@ -58,5 +58,19 @@ namespace USIL.BL.BC
             }
 
         }
+
+        public bool CarreraObtener(CarreraBE objCarreraBE)
+        {
+            try
+            {
+                CarreraDLAC objCarreraDALC = new CarreraDLAC();
+                return objCarreraDALC.CarreraObtener(objCarreraBE);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
     }
 }
