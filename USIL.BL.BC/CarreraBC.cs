@@ -59,7 +59,7 @@ namespace USIL.BL.BC
 
         }
 
-        public DocenteBE CarreraObtener(CarreraBE objCarreraBE)
+        public CarreraBE CarreraObtener(CarreraBE objCarreraBE)
         {
             try
             {
@@ -69,6 +69,7 @@ namespace USIL.BL.BC
             catch (Exception ex)
             {
                 return null;
+
             }
 
         }
