@@ -39,6 +39,7 @@ namespace USIL.DL.DLAC
                     objDocenteBE.Nro_Documento = Convert.ToInt32(reader[5]);
                     objDocenteBE.DocumentoID = Convert.ToInt32(reader[6]);
                     objDocenteBE.CarreraID = Convert.ToInt32(reader[7]);
+                    objDocenteBE.Estado = reader[8].ToString();
 
                     LstDocenteBE.Add(objDocenteBE);
                 }
@@ -58,7 +59,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspDocenteInsertar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
-                SqlParameter[] arrSqlParameter = new SqlParameter[8];
+                SqlParameter[] arrSqlParameter = new SqlParameter[9];
 
                 arrSqlParameter[0] = new SqlParameter();
                 arrSqlParameter[0].ParameterName = DocenteID;
@@ -123,11 +124,12 @@ namespace USIL.DL.DLAC
         public bool DocenteEditar(DocenteBE objDocenteBE)
         {
             try
-            { 
+            {
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspDocenteEditar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
-                SqlParameter[] arrSqlParameter = new SqlParameter[8];
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter[] arrSqlParameter = new SqlParameter[9];
 
                 arrSqlParameter[0] = new SqlParameter();
                 arrSqlParameter[0].ParameterName = DocenteID;
@@ -196,6 +198,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspDocenteEliminar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
                 SqlParameter arrSqlParameter = new SqlParameter();
 
                 arrSqlParameter.ParameterName = Codigo;
@@ -207,6 +210,45 @@ namespace USIL.DL.DLAC
                 Cmd.ExecuteNonQuery();
                 Con.Close();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public DocenteBE DocenteObtener(DocenteBE objDocenteBE)
+        {
+            try
+            {
+                SqlConnection Con = new SqlConnection(strCadenaConexion);
+                String strSP = "uspDocenteObtener";
+                SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter arrSqlParameter = new SqlParameter();
+
+                arrSqlParameter.ParameterName = Codigo;
+                arrSqlParameter.SqlDbType = SqlDbType.Int;
+                arrSqlParameter.Value = objDocenteBE.Codigo;
+
+                DocenteBE docenteobj = new DocenteBE();
+                Con.Open();
+                Cmd.Parameters.Add(arrSqlParameter);
+                Cmd.ExecuteNonQuery();
+                SqlDataReader reader = Cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    docenteobj.DocenteID = Convert.ToInt32(reader[0]);
+                    docenteobj.Codigo = Convert.ToInt32(reader[1]);
+                    docenteobj.Nombres = reader[2].ToString();
+                    docenteobj.Apellidos_paterno = reader[3].ToString();
+                    docenteobj.Apellidos_materno = reader[4].ToString();
+                    docenteobj.Nro_Documento = Convert.ToInt32(reader[5]);
+                    docenteobj.DocumentoID = Convert.ToInt32(reader[6]);
+                    docenteobj.CarreraID = Convert.ToInt32(reader[7]);
+                    docenteobj.Estado = reader[8].ToString();
+                }
+                Con.Close();
+                return docenteobj;
             }
             catch (Exception ex)
             {

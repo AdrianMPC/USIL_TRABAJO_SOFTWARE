@@ -58,5 +58,19 @@ namespace USIL.BL.BC
             }
 
         }
+
+        public DocenteBE CarreraObtener(CarreraBE objCarreraBE)
+        {
+            try
+            {
+                CarreraDLAC objCarreraDALC = new CarreraDLAC();
+                return objCarreraDALC.CarreraObtener(objCarreraBE);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+        }
     }
 }

@@ -27,6 +27,7 @@ namespace USIL.DL.DLAC
                     DocumentoBE objDocumentoBE = new DocumentoBE();
                     objDocumentoBE.Codigo = Convert.ToInt32(reader[0]);
                     objDocumentoBE.Nombre = reader[1].ToString();
+                    objDocumentoBE.Estado = reader[2].ToString();
                     LstDocumentoBE.Add(objDocumentoBE);
                 }
                 reader.Close();
@@ -45,6 +46,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspTipoDocumentoInsertar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
+
                 SqlParameter[] arrSqlParameter = new SqlParameter[2];
 
                 arrSqlParameter[0] = new SqlParameter();
@@ -82,7 +84,8 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspTipoDocumentoEditar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
-                SqlParameter[] arrSqlParameter = new SqlParameter[2];
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter[] arrSqlParameter = new SqlParameter[3];
 
                 arrSqlParameter[0] = new SqlParameter();
                 arrSqlParameter[0].ParameterName = Codigo;
@@ -119,6 +122,7 @@ namespace USIL.DL.DLAC
                 SqlConnection Con = new SqlConnection(strCadenaConexion);
                 String strSP = "uspTipoDocumentoEliminar";
                 SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
                 SqlParameter arrSqlParameter = new SqlParameter();
 
                 arrSqlParameter.ParameterName = Codigo;
@@ -130,6 +134,42 @@ namespace USIL.DL.DLAC
                 Cmd.ExecuteNonQuery();
                 Con.Close();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public DocumentoBE DocumentoObtener(DocumentoBE objDocumentoBE)
+        {
+            try
+            {
+                SqlConnection Con = new SqlConnection(strCadenaConexion);
+                String strSP = "uspTipoDocumentoObtener";
+                SqlCommand Cmd = new SqlCommand(strSP, Con);
+                Cmd.CommandType = CommandType.StoredProcedure;
+                SqlParameter arrSqlParameter = new SqlParameter();
+
+                arrSqlParameter.ParameterName = Codigo;
+                arrSqlParameter.SqlDbType = SqlDbType.Int;
+                arrSqlParameter.Value = objDocumentoBE.Codigo;
+              
+                Con.Open();
+                Cmd.Parameters.Add(arrSqlParameter);
+                Cmd.ExecuteNonQuery();
+                
+                DocumentoBE objDocumento = new DocumentoBE();
+
+                SqlDataReader reader = Cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    objDocumento.Codigo = Convert.ToInt32(reader[0]);
+                    objDocumento.Nombre = reader[1].ToString();
+                    objDocumento.Estado = reader[2].ToString();
+                }
+                Con.Close();
+                return objDocumento;
             }
             catch (Exception ex)
             {
