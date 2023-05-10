@@ -57,7 +57,6 @@ namespace USIL.BL.BC
                 return false;
             }
         }
-
         public DocenteBE DocenteObtener(DocenteBE objDocenteBE)
         {
             try
